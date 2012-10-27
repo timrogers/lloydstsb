@@ -5,6 +5,9 @@ Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
 # symbol keys :username, :password and :memorable_word
 require File.join(File.dirname(__FILE__), 'settings')
 
-# Cre
+# Create an instance of a Lloyds TSB customer - this is where we login.
 customer = LloydsTSB::Customer.new(@settings)
-puts customer.accounts.inspect
+
+customer.accounts.each do |account|
+  
+end

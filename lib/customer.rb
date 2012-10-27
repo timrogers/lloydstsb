@@ -4,8 +4,6 @@ require 'mechanize'
 require 'nokogiri'
 require 'open-uri'
 require 'date'
-require File.join(File.dirname(__FILE__), 'utils')
-require File.join(File.dirname(__FILE__), 'bank_account')
 
 module LloydsTSB
   class Customer
@@ -108,7 +106,7 @@ module LloydsTSB
         #acct[:transactions] << LloydsTSB::Transaction.new(data)
           
         
-        accounts << LloydsTSB::BankAccount.new(acct)
+        accounts << LloydsTSB::Account.new(acct)
       end
       accounts
     end   

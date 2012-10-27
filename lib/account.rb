@@ -1,5 +1,5 @@
 module LloydsTSB
-  class BankAccount
+  class Account
     attr_accessor :name, :balance, :limit, :transactions, :identifier, :agent, :type
     
     def initialize(hash = {})
