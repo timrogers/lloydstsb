@@ -23,7 +23,7 @@ module LloydsTSB
       @agent.get "https://online.lloydstsb.co.uk/personal/logon/login.jsp?WT.ac=hpIBlogon"
     end
     
-    def login
+    def accounts
       @agent.page.forms[0]["frmLogin:strCustomerLogin_userID"] = @settings[:username]
       @agent.page.forms[0]["frmLogin:strCustomerLogin_pwd"] = @settings[:password]
       @agent.page.forms[0].submit
@@ -49,9 +49,6 @@ module LloydsTSB
         raise "There was a problem when submitting your memorable word. (#{@agent.page.search('.formSubmitError').text})"
       end
       
-    end
-    
-    def accounts
       accounts = []
       doc = Nokogiri::HTML(@agent.page.body, 'UTF-8')
        doc.css('li.clearfix').each do |account|
@@ -114,8 +111,6 @@ module LloydsTSB
         accounts << LloydsTSB::BankAccount.new(acct)
       end
       accounts
-    end
-    
-    
+    end   
   end
 end
