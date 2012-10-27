@@ -29,6 +29,8 @@ module LloydsTSB
       # Fills in the relevant forms to login, gets account details and then
       # provides a response of accounts and transactions
       
+      return @accounts if @accounts
+      
       # Fill in the first authentication form then submits
       @agent.page.forms[0]["frmLogin:strCustomerLogin_userID"] = @settings[:username]
       @agent.page.forms[0]["frmLogin:strCustomerLogin_pwd"] = @settings[:password]
@@ -143,6 +145,7 @@ module LloydsTSB
 
         accounts << LloydsTSB::Account.new(acct)
       end
+      @accounts = accounts
       accounts
     end
   end
