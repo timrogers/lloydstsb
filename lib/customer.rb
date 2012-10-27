@@ -72,7 +72,7 @@ module LloydsTSB
               date: Date.parse(transaction.css('td')[0].text),
               narrative: transaction.css('td')[1].text,
             }
-            data[:amount] = transaction.css('td')[4].text.split(" ")[0]
+            data[:amount] = transaction.css('td')[4].text.split(" ")[0].to_f
             if transaction.css('td')[4].text.split(" ").length > 0
               data[:type] = :credit
             else
@@ -95,10 +95,10 @@ module LloydsTSB
           
             if incoming == ""
               data[:direction] = :debit
-              data[:amount] = out
+              data[:amount] = out.to_f
             else
               data[:direction] = :credit
-              data[:amount] = incoming
+              data[:amount] = incoming.to_f
             end
             acct[:transactions] << LloydsTSB::Transaction.new(data)
           end
