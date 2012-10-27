@@ -73,7 +73,7 @@ module LloydsTSB
               narrative: transaction.css('td')[1].text,
             }
             data[:amount] = transaction.css('td')[4].text.split(" ")[0].to_f
-            if transaction.css('td')[4].text.split(" ").length > 0
+            if transaction.css('td')[4].text.split(" ").length > 1
               data[:type] = :credit
             else
               data[:type] = :debit
