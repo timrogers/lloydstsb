@@ -12,8 +12,8 @@ customer = LloydsTSB::Customer.new(@settings)
 customer.accounts.each do |account|
   puts "Name: #{account.name}"
   puts "Type: #{account.type.to_s}"
-  puts "Balance: £#{account.balance}"
-  puts "Limit: £#{account.limit}"
+  puts "Balance: #{currencify(account.balance)}"
+  puts "Limit: #{currencify(account.limit)}"
   puts "Transactions:"
   puts ""
   account.transactions.each do |tx|
@@ -21,7 +21,8 @@ customer.accounts.each do |account|
     puts "Description: #{tx.narrative}"
     puts "Type: #{tx.type}"
     puts "Direction: #{tx.direction}"
-    puts "Amount: £#{tx.amount}"
+    puts "Amount: #{currencify(tx.amount)}"
+    puts "Unique reference: #{tx.unique_reference}"
     puts ""
   end
 end
