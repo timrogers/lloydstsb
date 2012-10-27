@@ -26,21 +26,21 @@ The file `example.rb` provides a very simple example of how the code works, but 
 
 A __LloydsTSB::Account__ instance has the following attributes:
 
-* name (string) - the name of the account
-* balance (integer) - the balance of the account, whether positive or negative. *(NB: The true meaning of balance is affected by whether the account is a :credit_card or a :bank_account)
-* limit (integer) - the credit limit for the account - this is an overdraft limit for a current account, or the spending limit on a credit card
-* transactions (array) - an array containing a number of `LloydsTSB::Transaction` object - this will be the 20(?) most recent transactions on the account
-* identifier (string) - some text, including the account number and sort code, or credit card number. This is basically unstructured at the moment.
-* type (symbol) - the type of the account, either `:credit_card` or `:bank_account`
+* __name (string)__ - the name of the account
+* __balance (integer)__ - the balance of the account, whether positive or negative. *(NB: The true meaning of balance is affected by whether the account is a :credit_card or a :bank_account)
+* __limit (integer)__ - the credit limit for the account - this is an overdraft limit for a current account, or the spending limit on a credit card
+* __transactions (array)__ - an array containing a number of `LloydsTSB::Transaction` object - this will be the 20(?) most recent transactions on the account
+* __identifier (string)__ - some text, including the account number and sort code, or credit card number. This is basically unstructured at the moment.
+* __type (symbol)__ - the type of the account, either `:credit_card` or `:bank_account`
 
 A __LloydsTSB::Account__ has many __LloydsTSB::Transaction__ instances in its transactions property. Each transaction has the following attributes:
 
-* date (Date) - the date of the transaction as shown on the statement
-* narrative (string) - a description of the transaction, most likely the name of the merchant
-* type (symbol) - the type of transaction, usually an acronym - a list is available on the Lloyds TSB site
-* direction (symbol) - either `:credit` or `:debit`, depending on what the transaction is
-* amount (integer) - The amount of the transaction, obviously...
-* unique_reference (string) - a hash to identify this transaction *(fairly)* uniquely...useful if you want to see whether a transaction is new or not
+* __date (Date)__ - the date of the transaction as shown on the statement
+* __narrative (string)__ - a description of the transaction, most likely the name of the merchant
+* __type (symbol)__ - the type of transaction, usually an acronym - a list is available on the Lloyds TSB site
+* __direction (symbol)__ - either `:credit` or `:debit`, depending on what the transaction is
+* __amount (integer)__ - The amount of the transaction, obviously...
+* __unique_reference (string)___ - a hash to identify this transaction *(fairly)* uniquely...useful if you want to see whether a transaction is new or not
 
 ### Limitations
 
