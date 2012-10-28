@@ -1,0 +1,5 @@
+require 'lloydstsb/version'
+require 'lloydstsb/account'
+require 'lloydstsb/customer'
+require 'lloydstsb/transaction'
+require 'lloydstsb/utils'
