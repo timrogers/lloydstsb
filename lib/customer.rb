@@ -8,7 +8,7 @@ require 'date'
 module LloydsTSB
   class Customer
 
-    attr_reader :agent
+    attr_reader :agent, :name
 
     def initialize(settings = {})
       # Creates a new Customer object - expects a hash with keys :username,
@@ -56,6 +56,8 @@ module LloydsTSB
         raise "There was a problem when submitting your memorable word.
           (#{@agent.page.search('.formSubmitError').text})"
       end
+      
+      @name = @agent.page.at('span.name').text
       
     end
 

@@ -8,6 +8,7 @@ require File.join(File.dirname(__FILE__), 'settings')
 
 # Create an instance of a Lloyds TSB customer - this is where we login.
 customer = LloydsTSB::Customer.new(@settings)
+puts customer.name
 
 customer.accounts.each do |account|
   puts "Name: #{account.name}"

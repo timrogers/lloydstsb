@@ -24,6 +24,12 @@ The file `example.rb` provides a very simple example of how the code works, but 
 
 ### Data models
 
+A __LloydsTSB::Customer__ is created with `LloydsTSB::Customer.new` with a hash of settings passed in. It has the following attributes:
+
+* __agent (Mechanize::Agent)__ - the Mechanize agent used to browse around the online banking system. This will be pointing at the "Your accounts" page.
+* __name (string)__ - the name of the customer
+* __accounts (array)__ - an array of LloydsTSB::Account objects representing accounts held by the customer
+
 A __LloydsTSB::Account__ instance has the following attributes:
 
 * __name (string)__ - the name of the account
