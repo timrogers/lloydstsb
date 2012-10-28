@@ -8,11 +8,20 @@ I know the code in this is pretty messy, and as ever, it's untested. I tried to 
 
 The file `example.rb` provides a very simple example of how the code works, but here's a step by step:
 
-1. Include all the files in the /lib directory - this includes the actual code for the parser, and a couple of different data models ('transaction' and 'account')
+1. Ensure the gem is installed, and then include it in your Ruby file, or in your Gemfile where appropriate:
 
-`Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }`
+`$ gem install lloydstsb`
+`require 'lloydstsb'`
 
 2. Create a hash with three symbol keys, `:username`, `:password` and `:memorable_word`, each unsurprisingly corresponding to different authentication details used
+
+```
+@settings = {
+  username: "123456789",
+  password: "a secure password",
+  memorable_word: "banking"
+}
+```
 
 3. Instantiate a new instance of the `LloydsTSB::Customer` object, passing in the hash from the previous step - this is used to perform the authentication required.
 
@@ -20,7 +29,11 @@ The file `example.rb` provides a very simple example of how the code works, but 
 
 4. Call the `accounts` method of the object you just made - it'll take a few seconds, and will return a number of `LloydsTSB::Account` objects. Play with the response as you wish.
 
-`customer.accounts`
+```
+puts customer.name
+customer.accounts
+customer.accounts.first.transactions
+```
 
 ### Data models
 

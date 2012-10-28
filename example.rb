@@ -1,6 +1,6 @@
 # encoding: utf-8
-# Bring in all the files in lib/, including the scraper and the data models
-Dir[File.dirname(__FILE__) + '/lib/*.rb'].each {|file| require file }
+# Include the library files from the Gem
+require 'lloydstsb'
 
 # Bring in the settings file - it should contain a hash of @settings with the
 # symbol keys :username, :password and :memorable_word
