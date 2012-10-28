@@ -36,7 +36,7 @@ A __LloydsTSB::Account__ instance has the following attributes:
 * __balance (integer)__ - the balance of the account, whether positive or negative. *(NB: The true meaning of balance is affected by whether the account is a :credit_card or a :bank_account)
 * __limit (integer)__ - the credit limit for the account - this is an overdraft limit for a current account, or the spending limit on a credit card
 * __transactions (array)__ - an array containing a number of `LloydsTSB::Transaction` object - this will be the 20(?) most recent transactions on the account
-* __identifier (string)__ - some text, including the account number and sort code, or credit card number. This is basically unstructured at the moment.
+* __details__ (hash)__ - the identifying information for the account as a hash. For a bank account, this will have keys :account_number and :sort_code, with :card_number for credit cards
 * __type (symbol)__ - the type of the account, either `:credit_card` or `:bank_account`
 
 A __LloydsTSB::Account__ has many __LloydsTSB::Transaction__ instances in its transactions property. Each transaction has the following attributes:
@@ -51,7 +51,7 @@ A __LloydsTSB::Account__ has many __LloydsTSB::Transaction__ instances in its tr
 ### Limitations
 
 * I haven't tested this with savings account, so it may well mess the script up and cause exceptions. I'll need to open a savings account to test this.
-* The `identifier` of an account is unstructured, ie. you don't know what type of data it is, it's just a string ripped out from the page
+* It will only show a limited number of transactions - it doesn't navigate through the different pages
 
 ### License
 

@@ -74,7 +74,6 @@ module LloydsTSB
         # This is an account in the table - let's read out the details...
         acct = {
           name: account.css('a')[0].text,
-          identifier: account.css('.numbers').text,
           balance: account.css('p.balance').text.split(" ")[1]
             .gsub("£", "").gsub(",", "").to_f,
           limit: account.css('p.accountMsg').text.split(" ")[2]
@@ -91,6 +90,9 @@ module LloydsTSB
         # this is a credit card rather than a bank account
         if account_agent.page.body.include?("Minimum payment")
           acct[:type] = :credit_card
+          acct[:details] = {
+            card_number: account.css('.numbers').text.gsub(" Card Number ", "")
+          }
           Nokogiri::HTML(account_agent.page.body, 'UTF-8').css('tbody tr').each do |transaction|
             
             # Credit card statements start with the previous statement's
@@ -121,6 +123,11 @@ module LloydsTSB
         else
           # This is a bank account of some description
           acct[:type] = :bank_account
+          details = account.css('.numbers').text.gsub(" Sort Code", "").gsub("Account Number ", "").split(", ")
+          acct[:details] = {
+            sort_code: details[0],
+            account_number: details[1]
+          }
           Nokogiri::HTML(account_agent.page.body, 'UTF-8').css('tbody tr').each do |transaction|
             # Let's read the details from the table...
             data = {
