@@ -10,8 +10,10 @@ The file `example.rb` provides a very simple example of how the code works, but 
 
 1. Ensure the gem is installed, and then include it in your Ruby file, or in your Gemfile where appropriate:
 
-`$ gem install lloydstsb`
-`require 'lloydstsb'`
+```
+$ gem install lloydstsb
+`require 'lloydstsb'
+```
 
 2. Create a hash with three symbol keys, `:username`, `:password` and `:memorable_word`, each unsurprisingly corresponding to different authentication details used
 
