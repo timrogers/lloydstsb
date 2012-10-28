@@ -23,13 +23,6 @@ module LloydsTSB
       end
 
       @agent.get "https://online.lloydstsb.co.uk/personal/logon/login.jsp?WT.ac=hpIBlogon"
-    end
-
-    def accounts
-      # Fills in the relevant forms to login, gets account details and then
-      # provides a response of accounts and transactions
-      
-      return @accounts if @accounts
       
       # Fill in the first authentication form then submits
       @agent.page.forms[0]["frmLogin:strCustomerLogin_userID"] = @settings[:username]
@@ -63,6 +56,14 @@ module LloydsTSB
         raise "There was a problem when submitting your memorable word.
           (#{@agent.page.search('.formSubmitError').text})"
       end
+      
+    end
+
+    def accounts
+      # Fills in the relevant forms to login, gets account details and then
+      # provides a response of accounts and transactions
+      
+      return @accounts if @accounts
 
       # We're in, now to find the accounts...
       accounts = []
