@@ -28,3 +28,4 @@ customer.accounts.each do |account|
     puts ""
   end
 end
+customer.logoff

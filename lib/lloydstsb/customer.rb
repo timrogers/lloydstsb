@@ -60,6 +60,19 @@ module LloydsTSB
       
     end
 
+    def logoff
+      # let's be polite, so LTSB don't end up with unnecessary sessions clogging their database
+      logoff_link = @agent.page.at('//*[@id="lnkCustomerLogoff"]')
+      if logoff_link.nil?
+        raise "Could not find logoff link"
+      end
+      @agent.get logoff_link['href']
+      unless @agent.page.title == "Lloyds TSB - Logged Off"
+        raise "Log off did not succeed."
+      end
+    end
+
+
     def accounts
       # Fills in the relevant forms to login, gets account details and then
       # provides a response of accounts and transactions
