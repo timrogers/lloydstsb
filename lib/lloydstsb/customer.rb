@@ -71,11 +71,12 @@ module LloydsTSB
       doc = Nokogiri::HTML(@agent.page.body, 'UTF-8')
        doc.css('li.clearfix').each do |account|
         # This is an account in the table - let's read out the details...
+
         acct = {
           name: account.css('a')[0].text,
           balance: account.css('p.balance').text.split(" ")[1]
-            .gsub("£", "").gsub(",", "").to_f,
-          limit: account.css('p.accountMsg').text.split(" ")[2]
+            .gsub("£", "").gsub(",", "").gsub('Nil','0').to_f,
+          limit: account.css('p.accountMsg').text.empty? ? 0.00 : account.css('p.accountMsg').text.split(" ")[2]
             .gsub("£", "").gsub(",", "").to_f,
           transactions: []
           }
