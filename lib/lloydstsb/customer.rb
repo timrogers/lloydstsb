@@ -91,13 +91,15 @@ module LloydsTSB
             .gsub("£", "").gsub(",", "").gsub('Nil','0').to_f,
           limit: account.css('p.accountMsg').text.empty? ? 0.00 : account.css('p.accountMsg').text.split(" ")[2]
             .gsub("£", "").gsub(",", "").to_f,
+          viewpage_url: 'https://secure2.lloydstsb.co.uk' + account.css('a')[0]['href'],
+          agent: @agent,
           transactions: []
           }
 
         # Now we need to find the recent transactions for the account...We'll
         # go to the account's transactions page and read the table
         account_agent = @agent.dup
-        account_agent.get(account.css('a')[0]['href'])
+        account_agent.get(acct[:viewpage_url])
         
         # If there's a mention of "minimum payment" on the transactions page,
         # this is a credit card rather than a bank account

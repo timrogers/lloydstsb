@@ -16,16 +16,10 @@ customer.accounts.each do |account|
   puts "Type: #{account.type.to_s}"
   puts "Balance: #{currencify(account.balance)}"
   puts "Limit: #{currencify(account.limit)}"
-  puts "Transactions:"
-  puts ""
-  account.transactions.each do |tx|
-    puts "Date: #{tx.date}"
-    puts "Description: #{tx.narrative}"
-    puts "Type: #{tx.type}"
-    puts "Direction: #{tx.direction}"
-    puts "Amount: #{currencify(tx.amount)}"
-    puts "Unique reference: #{tx.unique_reference}"
-    puts ""
-  end
+end
+customer.accounts[0].get_transactions_from(Date.today - 100)
+puts "Transactions from 100 days ago:"
+customer.accounts[0].transactions.each do |tx|
+    puts "Date: #{tx.date}, Description: #{tx.narrative}, Amount: #{currencify(tx.amount)}"
 end
 customer.logoff
