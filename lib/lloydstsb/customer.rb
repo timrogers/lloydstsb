@@ -84,6 +84,7 @@ module LloydsTSB
       doc = Nokogiri::HTML(@agent.page.body, 'UTF-8')
        doc.css('li.clearfix').each do |account|
         # This is an account in the table - let's read out the details...
+        next if account.css('p.balance').text.empty? # Scottish Widows investments etc.
 
         acct = {
           name: account.css('a')[0].text,
