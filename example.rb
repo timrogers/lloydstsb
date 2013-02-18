@@ -8,6 +8,9 @@ require File.join(File.dirname(__FILE__), 'settings')
 
 # Create an instance of a Lloyds TSB customer - this is where we login.
 customer = LloydsTSB::Customer.new(@settings)
+customer.messages.each do |messages|
+  puts "Message from your bank: #{message}"
+end
 puts "These accounts belong to #{customer.name}."
 
 customer.accounts.each do |account|
@@ -23,3 +26,4 @@ customer.accounts[0].transactions.each do |tx|
     puts "Date: #{tx.date}, Description: #{tx.narrative}, Amount: #{currencify(tx.amount)}"
 end
 customer.logoff
+

@@ -7,13 +7,14 @@ require 'date'
 module LloydsTSB
   class Customer
 
-    attr_reader :agent, :name
+    attr_reader :agent, :name, :messages
 
     def initialize(settings = {})
       # Creates a new Customer object - expects a hash with keys :username,
       # :password and :memorable_word
       @agent = Mechanize.new
       @settings = settings
+      @messages = []
 
       if @settings[:username].blank? ||
         @settings[:password].blank? ||
@@ -58,6 +59,10 @@ module LloydsTSB
       
       @name = @agent.page.at('span.name').text
       
+      if @agent.page.title == 'Lloyds TSB - Mandatory Messages'
+        @agent.page.forms[0].click_button
+      end
+      @name
     end
 
     def logoff
