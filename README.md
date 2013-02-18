@@ -37,6 +37,11 @@ customer.accounts
 customer.accounts.first.transactions
 ```
 
+5. If you wish to read transactions further back than the most recent 25 then this will need to be collected on a per account basis. You'll need a line of the form
+```customer.accounts[0].get_transactions_from(Date.today - 100)
+```
+There is sample usage in example.rb
+
 ### Data models
 
 A __LloydsTSB::Customer__ is created with `LloydsTSB::Customer.new` with a hash of settings passed in. It has the following attributes:
@@ -65,8 +70,7 @@ A __LloydsTSB::Account__ has many __LloydsTSB::Transaction__ instances in its tr
 
 ### Limitations
 
-* I haven't tested this with savings account, so it may well mess the script up and cause exceptions. I'll need to open a savings account to test this.
-* It will only show a limited number of transactions - it doesn't navigate through the different pages
+* It's not able to view the details of Scottish Widows investments. This is because the LTSB site does not display the data in-line.
 
 ### License
 
