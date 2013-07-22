@@ -118,7 +118,7 @@ module LloydsTSB
             
             # Credit card statements start with the previous statement's
             # balance. We don't want to record this as a transaction.
-            next if transaction.css('td')[1].text == "Balance from Previous Statement"
+            next if transaction.css('td')[1].text == "Balance from last statement"
             
             # Let's get the data for the transaction...
             data = {
