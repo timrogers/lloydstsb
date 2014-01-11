@@ -83,12 +83,13 @@ module LloydsTSB
       # provides a response of accounts and transactions
       
       return @accounts if @accounts
-
       # We're in, now to find the accounts...
       accounts = []
       doc = Nokogiri::HTML(@agent.page.body, 'UTF-8')
        doc.css('li.clearfix').each do |account|
         # This is an account in the table - let's read out the details...
+
+        next if account.css('p.accountMsg').text =~ /^Remaining allowance:/
         next if account.css('p.balance').text.empty? # Scottish Widows investments etc.
 
         acct = {
