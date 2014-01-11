@@ -22,7 +22,7 @@ module LloydsTSB
           raise "You must provide a username, password and memorable word."
       end
 
-      @agent.get "https://online.lloydstsb.co.uk/personal/logon/login.jsp?WT.ac=hpIBlogon"
+      @agent.get "https://online.lloydsbank.co.uk/personal/logon/login.jsp?WT.ac=hpIBlogon"
       
       # Fill in the first authentication form then submits
       @agent.page.forms[0]["frmLogin:strCustomerLogin_userID"] = @settings[:username]
@@ -59,7 +59,7 @@ module LloydsTSB
       
       @name = @agent.page.at('span.name').text
       
-      if @agent.page.title == 'Lloyds TSB - Mandatory Messages'
+      if @agent.page.title == 'Lloyds Bank - Mandatory Messages'
         @agent.page.forms[0].click_button
       end
       @name
@@ -72,7 +72,7 @@ module LloydsTSB
         raise "Could not find logoff link"
       end
       @agent.get logoff_link['href']
-      unless @agent.page.title == "Lloyds TSB - Logged Off"
+      unless @agent.page.title == "Lloyds Bank - Logged Off"
         raise "Log off did not succeed."
       end
     end
