@@ -115,7 +115,10 @@ module LloydsTSB
             card_number: account.css('.numbers').text.gsub(" Card Number ", "")
           }
           Nokogiri::HTML(account_agent.page.body, 'UTF-8').css('tbody tr').each do |transaction|
-            
+
+            # If there are no transactions (e.g. a bill has just been paid)
+            next if transaction.css('td')[0].text == "There are no further statement entries available."
+
             # Credit card statements start with the previous statement's
             # balance. We don't want to record this as a transaction.
             next if transaction.css('td')[1].text == "Balance from last statement"
