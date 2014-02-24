@@ -7,13 +7,14 @@ require 'date'
 module LloydsTSB
   class Customer
 
-    attr_reader :agent, :name
+    attr_reader :agent, :name, :messages
 
     def initialize(settings = {})
       # Creates a new Customer object - expects a hash with keys :username,
       # :password and :memorable_word
       @agent = Mechanize.new
       @settings = settings
+      @messages = []
 
       if @settings[:username].blank? ||
         @settings[:password].blank? ||
@@ -21,7 +22,7 @@ module LloydsTSB
           raise "You must provide a username, password and memorable word."
       end
 
-      @agent.get "https://online.lloydstsb.co.uk/personal/logon/login.jsp?WT.ac=hpIBlogon"
+      @agent.get "https://online.lloydsbank.co.uk/personal/logon/login.jsp?WT.ac=hpIBlogon"
       
       # Fill in the first authentication form then submits
       @agent.page.forms[0]["frmLogin:strCustomerLogin_userID"] = @settings[:username]
@@ -58,32 +59,54 @@ module LloydsTSB
       
       @name = @agent.page.at('span.name').text
       
+      if @agent.page.title == 'Lloyds Bank - Mandatory Messages'
+        @agent.page.forms[0].click_button
+      end
+      @name
     end
+
+    def logoff
+      # let's be polite, so LTSB don't end up with unnecessary sessions clogging their database
+      logoff_link = @agent.page.at('//*[@id="lnkCustomerLogoff"]')
+      if logoff_link.nil?
+        raise "Could not find logoff link"
+      end
+      @agent.get logoff_link['href']
+      unless @agent.page.title == "Lloyds Bank - Logged Off"
+        raise "Log off did not succeed."
+      end
+    end
+
 
     def accounts
       # Fills in the relevant forms to login, gets account details and then
       # provides a response of accounts and transactions
       
       return @accounts if @accounts
-
       # We're in, now to find the accounts...
       accounts = []
       doc = Nokogiri::HTML(@agent.page.body, 'UTF-8')
        doc.css('li.clearfix').each do |account|
         # This is an account in the table - let's read out the details...
+
+        next if account.css('p.accountMsg').text =~ /^Remaining allowance:/
+        next if account.css('p.balance').text.empty? # Scottish Widows investments etc.
+
         acct = {
           name: account.css('a')[0].text,
           balance: account.css('p.balance').text.split(" ")[1]
+            .gsub("£", "").gsub(",", "").gsub('Nil','0').to_f,
+          limit: account.css('p.accountMsg').text.empty? ? 0.00 : account.css('p.accountMsg').text.split(" ")[2]
             .gsub("£", "").gsub(",", "").to_f,
-          limit: account.css('p.accountMsg').text.split(" ")[2]
-            .gsub("£", "").gsub(",", "").to_f,
+          viewpage_url: 'https://secure2.lloydstsb.co.uk' + account.css('a')[0]['href'],
+          agent: @agent,
           transactions: []
           }
 
         # Now we need to find the recent transactions for the account...We'll
         # go to the account's transactions page and read the table
         account_agent = @agent.dup
-        account_agent.get(account.css('a')[0]['href'])
+        account_agent.get(acct[:viewpage_url])
         
         # If there's a mention of "minimum payment" on the transactions page,
         # this is a credit card rather than a bank account
@@ -93,10 +116,13 @@ module LloydsTSB
             card_number: account.css('.numbers').text.gsub(" Card Number ", "")
           }
           Nokogiri::HTML(account_agent.page.body, 'UTF-8').css('tbody tr').each do |transaction|
-            
+
+            # If there are no transactions (e.g. a bill has just been paid)
+            next if transaction.css('td')[0].text == "There are no further statement entries available."
+
             # Credit card statements start with the previous statement's
             # balance. We don't want to record this as a transaction.
-            next if transaction.css('td')[1].text == "Balance from Previous Statement"
+            next if transaction.css('td')[1].text == "Balance from last statement"
             
             # Let's get the data for the transaction...
             data = {
